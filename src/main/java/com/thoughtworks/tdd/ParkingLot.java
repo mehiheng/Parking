@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ParkingLot {
     int size;
-    private Map<Receipt,Car> carList=new HashMap<>();
+    protected Map<Receipt,Car> carList=new HashMap<>();
 
     public ParkingLot(int i) {
         size=i;
@@ -16,6 +16,7 @@ public class ParkingLot {
         if(size==0){
         throw new ParkingLotFullException();
         }
+        size=size-1;
         Receipt receipt=new Receipt();
         carList.put(receipt,car);
         return receipt;
@@ -23,6 +24,7 @@ public class ParkingLot {
     }
 
     public Car unPark(Receipt receipt) {
+        size=size+1;
         return carList.remove(receipt);
     }
 
