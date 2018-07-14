@@ -65,6 +65,9 @@ public class ParkingBoy {
         System.out.println("请输入小票编号：");
         Scanner in= new Scanner(System.in);
         String id=in.next();
+        if(!cardList.containsKey(id)){
+            System.out.println("非法小票，无法取出车，请查证后再输");
+        }
         for(ParkingLot a:list){
             if(a.cardList.containsKey(id)){
                 a.size+=1;
@@ -72,8 +75,6 @@ public class ParkingBoy {
                 cardList.remove(id);
                 a.cardList.remove(id);
                 break;
-            }else if(a.equals(cardList.get(cardList.size()-1))){
-                System.out.println("非法小票，无法取出车，请查证后再输");
             }
         }
     }

@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class parkControl {
     parkview view;
     ParkingBoy parkingBoy=new ParkingBoy();
-    int command;
+
 
     public parkControl(parkview view) {
         this.view = view;
@@ -25,12 +25,12 @@ public class parkControl {
     }
 
     public void begin() throws IOException {
-         command=view.showBegin();
-         judge();
+         int command=view.showBegin();
+         judge(command);
     }
 
 
-    public void judge() throws IOException {
+    public void judge(int command) throws IOException {
         if(command==1){
             parkingBoy.parkcar();
             begin();
