@@ -3,10 +3,12 @@ package com.thoughtworks.tdd;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class ParkingLot {
-    int size;
-    protected Map<Receipt,Car> carList=new HashMap<>();
+    public Map<String,String> cardList=new HashMap<>();
+    public int size;
+    public Map<Receipt,Car> carList=new HashMap<>();
 
     public ParkingLot(int i) {
         size=i;

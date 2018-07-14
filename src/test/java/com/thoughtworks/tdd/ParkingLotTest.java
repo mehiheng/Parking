@@ -1,6 +1,11 @@
 package com.thoughtworks.tdd;
 
+import com.thoughtworks.tdd.controller.parkControl;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.io.PrintStream;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -16,7 +21,7 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
 
         try {
-            parkingLot.park(new Car());
+            parkingLot.park(new Car("A0001"));
         } catch (ParkingLotFullException exception) {
             fail("should park successfully");
         }
@@ -29,7 +34,7 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(0);
 
         try {
-            parkingLot.park(new Car());
+            parkingLot.park(new Car("A0001"));
             fail("should park successfully");
         } catch (ParkingLotFullException exception) {
 
@@ -41,7 +46,7 @@ public class ParkingLotTest {
     public void should_get_specific_car_when_call_unPark_given_receipt_is_right(){
         ParkingLot parkingLot = new ParkingLot(1);
 
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         Receipt receipt = parkingLot.park(theCar);
 
         assertThat(parkingLot.unPark(receipt), is(theCar));
@@ -52,7 +57,7 @@ public class ParkingLotTest {
     public void should_not_get_specific_car_when_call_unPark_given_receipt_is_wrong(){
         ParkingLot parkingLot = new ParkingLot(1);
 
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         Receipt receipt = parkingLot.park(theCar);
 
         Receipt anotherReceipt = new Receipt();
@@ -79,7 +84,7 @@ public class ParkingLotTest {
     public void should_be_false_when_call_isFull_given_a_full_parking_lot_take_out_a_car(){
         ParkingLot parkingLot = new ParkingLot(1);
 
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         Receipt receipt = parkingLot.park(theCar);
         parkingLot.unPark(receipt);
 
@@ -90,12 +95,12 @@ public class ParkingLotTest {
     public void should_park_successfullly_when_call_park_again_given_a_full_parking_lot_take_out_a_car(){
         ParkingLot parkingLot = new ParkingLot(1);
 
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         Receipt receipt = parkingLot.park(theCar);
         parkingLot.unPark(receipt);
 
         try {
-            parkingLot.park(new Car());
+            parkingLot.park(new Car("A0001"));
         } catch (ParkingLotFullException exception) {
             fail("should park successfully");
         }
@@ -110,8 +115,8 @@ public class ParkingLotTest {
         ParkingLot ParkingLot2 = new ParkingLot(1);
         ParkingLotBoy2.add(ParkingLot);
         ParkingLotBoy2.add(ParkingLot2);
-        Car theCar = new Car();
-        Car theCar1 = new Car();
+        Car theCar = new Car("A0001");
+        Car theCar1 = new Car("B0001");
         try {
             ParkingLotBoy2.parkcar(theCar);
             ParkingLotBoy2.parkcar(theCar1);
@@ -127,9 +132,9 @@ public class ParkingLotTest {
         ParkingLot ParkingLot2 = new ParkingLot(1);
         ParkingBoy.add(ParkingLot);
         ParkingBoy.add(ParkingLot2);
-        Car theCar = new Car();
-        Car theCar1 = new Car();
-        Car theCar2 = new Car();
+        Car theCar = new Car("A0001");
+        Car theCar1 = new Car("B0001");
+        Car theCar2 = new Car("C0001");
         try {
             ParkingBoy.parkcar(theCar);
             ParkingBoy.parkcar(theCar1);
@@ -145,10 +150,10 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
         ParkingBoy ParkingBoy=new ParkingBoy();
         ParkingBoy.add(parkingLot);
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         Receipt receipt = ParkingBoy.parkcar(theCar);
 
-        assertThat(ParkingBoy.unPark(receipt), is(theCar));
+        assertThat(ParkingBoy.unPark(receipt), is(theCar.carId));
 
     }
 
@@ -159,12 +164,12 @@ public class ParkingLotTest {
         ParkingBoy ParkingBoy=new ParkingBoy();
         ParkingBoy.add(parkingLot);
         ParkingBoy.add(parkingLot2);
-        Car theCar = new Car();
-        Car theCar2 = new Car();
+        Car theCar = new Car("A0001");
+        Car theCar2 = new Car("A0001");
         Receipt receipt = ParkingBoy.parkcar(theCar);
         Receipt receipt2 = ParkingBoy.parkcar(theCar2);
-        assertThat(ParkingBoy.unPark(receipt), is(theCar));
-        assertThat(ParkingBoy.unPark(receipt2), is(theCar2));
+        assertThat(ParkingBoy.unPark(receipt), is(theCar.carId));
+        assertThat(ParkingBoy.unPark(receipt2), is(theCar2.carId));
     }
 
     @Test
@@ -174,7 +179,7 @@ public class ParkingLotTest {
         ParkingLot ParkingLot2 = new ParkingLot(1);
         ParkingBoy.add(ParkingLot);
         ParkingBoy.add(ParkingLot2);
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         ParkingBoy.parkcar(theCar);
         assertThat(ParkingLot.size, is(0));
 
@@ -184,11 +189,25 @@ public class ParkingLotTest {
         ParkingLot parkingLot = new ParkingLot(1);
         ParkingBoy ParkingBoy=new ParkingBoy();
         ParkingBoy.add(parkingLot);
-        Car theCar = new Car();
+        Car theCar = new Car("A0001");
         Receipt receipt = ParkingBoy.parkcar(theCar);
 
         Receipt anotherReceipt = new Receipt();
 
-        assertThat(parkingLot.unPark(anotherReceipt), not(theCar));
+        assertThat(parkingLot.unPark(anotherReceipt), not(theCar.carId));
     }
+
+    @Test
+    public void wrong_input(){
+       ParkingBoy parkingBoy=new ParkingBoy();
+       ParkingLot lot1=new ParkingLot(2);
+       ParkingLot lot2=new ParkingLot(3);
+       parkingBoy.add(lot1);
+       parkingBoy.add(lot2);
+       parkingBoy.parkcar();
+       assertThat(System.out), is("停车成功，您的小票是：");
+    }
+
 }
+
+
