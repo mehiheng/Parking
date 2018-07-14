@@ -197,16 +197,16 @@ public class ParkingLotTest {
         assertThat(parkingLot.unPark(anotherReceipt), not(theCar.carId));
     }
 
-    @Test
-    public void wrong_input(){
-       ParkingBoy parkingBoy=new ParkingBoy();
-       ParkingLot lot1=new ParkingLot(2);
-       ParkingLot lot2=new ParkingLot(3);
-       parkingBoy.add(lot1);
-       parkingBoy.add(lot2);
-       parkingBoy.parkcar();
-       assertThat(System.out), is("停车成功，您的小票是：");
-    }
+//    @Test
+//    public void wrong_input(){
+//       ParkingBoy parkingBoy=new ParkingBoy();
+//       ParkingLot lot1=new ParkingLot(2);
+//       ParkingLot lot2=new ParkingLot(3);
+//       parkingBoy.add(lot1);
+//       parkingBoy.add(lot2);
+//       parkingBoy.parkcar();
+//       assertThat(System.out), is("停车成功，您的小票是：");
+//    }
 
 }
 
