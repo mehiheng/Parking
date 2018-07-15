@@ -239,6 +239,20 @@ public class ParkingLotTest {
         assertThat(pc.unPark(view.unParkGetIdview()), is("车已取出，您的车牌号是: A1" ));
     }
 
+
+    @Test
+    public void command_2_wrong_input_unpark() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        pc.setParkingBoy();
+//        Mockito.when(view.showBegin()).thenReturn(1);
+        Receipt receipt=new Receipt();
+        Receipt receipt2=new Receipt();
+        pc.park(view.getCarIdview(),receipt);
+        Mockito.when(view.unParkGetIdview()).thenReturn(receipt2.id);
+        assertThat(pc.unPark(view.unParkGetIdview()), is("非法小票，无法取出车，请查证后再输" ));
+    }
+
     @Test
     public void full_test() throws IOException {
         parkview view = mock(parkview.class);
