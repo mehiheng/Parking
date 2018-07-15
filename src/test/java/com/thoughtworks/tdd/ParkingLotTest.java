@@ -1,18 +1,25 @@
 package com.thoughtworks.tdd;
 
+import com.sun.xml.internal.fastinfoset.tools.TransformInputOutput;
 import com.thoughtworks.tdd.controller.parkControl;
 import com.thoughtworks.tdd.view.parkview;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+//import static org.hamcrest.MatcherAssert.assertThat;
+//import static org.junit.jupiter.api.Assertions.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 
 public class ParkingLotTest {
@@ -197,6 +204,81 @@ public class ParkingLotTest {
 
         assertThat(parkingLot.unPark(anotherReceipt), not(theCar.carId));
     }
+
+    @Test
+    public void command_3_park() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        pc.setParkingBoy();
+        Mockito.when(view.showBegin()).thenReturn(10);
+        assertThat(pc.judge(view.showBegin()), is("非法指令，请查证后再输"));
+    }
+
+    @Test
+    public void command_1_park() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        pc.setParkingBoy();
+//        Mockito.when(view.showBegin()).thenReturn(1);
+        Mockito.when(view.getCarIdview()).thenReturn("A1");
+        Receipt receipt=new Receipt();
+        assertThat(pc.park(view.getCarIdview(),receipt), is("停车成功，您的小票是：\n" +
+                receipt.id));
+    }
+
+    @Test
+    public void command_2_unpark() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        pc.setParkingBoy();
+//        Mockito.when(view.showBegin()).thenReturn(1);
+        Mockito.when(view.getCarIdview()).thenReturn("A1");
+        Receipt receipt=new Receipt();
+        pc.park(view.getCarIdview(),receipt);
+        Mockito.when(view.unParkGetIdview()).thenReturn(receipt.id);
+        assertThat(pc.unPark(view.unParkGetIdview()), is("车已取出，您的车牌号是: A1" ));
+    }
+
+    @Test
+    public void full_test() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        pc.setParkingBoy();
+//        Mockito.when(view.showBegin()).thenReturn(1);
+        Mockito.when(view.getCarIdview()).thenReturn("A1");
+        Receipt receipt=new Receipt();
+        pc.park(view.getCarIdview(),receipt);
+        Mockito.when(view.getCarIdview()).thenReturn("A2");
+        Receipt receipt1=new Receipt();
+        pc.park(view.getCarIdview(),receipt1);
+        Mockito.when(view.getCarIdview()).thenReturn("A3");
+        Receipt receipt2=new Receipt();
+        assertThat((pc.park(view.getCarIdview(),receipt2)), is("车已停满，请晚点再来"));
+    }
+
+    @Test
+    public void full_off_a_car_park_again_test() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        pc.setParkingBoy();
+//        Mockito.when(view.showBegin()).thenReturn(1);
+        Mockito.when(view.getCarIdview()).thenReturn("A1");
+        Receipt receipt=new Receipt();
+        pc.park(view.getCarIdview(),receipt);
+        Mockito.when(view.getCarIdview()).thenReturn("A2");
+        Mockito.when(view.unParkGetIdview()).thenReturn(receipt.id);
+        pc.unPark(view.unParkGetIdview());
+        Receipt receipt1=new Receipt();
+        pc.park(view.getCarIdview(),receipt1);
+        Mockito.when(view.getCarIdview()).thenReturn("A3");
+        Receipt receipt2=new Receipt();
+        assertThat((pc.park(view.getCarIdview(),receipt2)),is("停车成功，您的小票是：\n" +
+                receipt2.id));
+    }
+
+
+
+
 
 }
 
