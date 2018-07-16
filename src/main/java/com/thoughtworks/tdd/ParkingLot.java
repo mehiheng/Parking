@@ -8,10 +8,14 @@ import java.util.UUID;
 public class ParkingLot {
     public Map<String,String> cardList=new HashMap<>();
     public int size;
+    public String name;
+    public int originsize;
     public Map<Receipt,Car> carList=new HashMap<>();
 
-    public ParkingLot(int i) {
+    public ParkingLot(String n,int i,int r) {
         size=i;
+        name=n;
+        originsize=r;
     }
 
     public Receipt park(Car car) {

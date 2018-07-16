@@ -28,30 +28,16 @@ public class ParkingBoy {
             if (a.size == 0 && a != list.get(list.size() - 1)) {
                 continue;
             } else if (a.size <= 0) {
-//                System.out.println("车已停满，请晚点再来");
-                return "车已停满，请晚点再来";
-//                break;
             }
             a.size = a.size - 1;
-//          String carId = getCarId();
-//          Receipt receipt = new Receipt();
             a.cardList.put(receipt.id, carId);
             tempcar = carId;
             tempid = receipt.id;
-            System.out.println("停车成功，您的小票是：\n" +
-                    tempid);
             break;
         }
         cardList.put(tempid, tempcar);
-        return  "停车成功，您的小票是：\n" +
-                tempid;
+        return tempid;
     }
-
-//    public String getCarId() {
-//        System.out.println("请输入车牌号:");
-//        Scanner in = new Scanner(System.in);
-//        return in.next();
-//    }
 
     public void add(ParkingLot parkingLot) {
         list.add(parkingLot);
@@ -69,18 +55,15 @@ public class ParkingBoy {
 
     public String unpark(String id) {
         if (!cardList.containsKey(id)) {
-            System.out.println("非法小票，无法取出车，请查证后再输");
-            return "非法小票，无法取出车，请查证后再输";
+            return null;
         }
         for (ParkingLot a : list) {
             if (a.cardList.containsKey(id)) {
                 a.size += 1;
-                System.out.println("车已取出，您的车牌号是: " + a.cardList.get(id));
                 String temp=a.cardList.get(id);
                 cardList.remove(id);
                 a.cardList.remove(id);
-                return "车已取出，您的车牌号是: " + temp;
-//                break;
+                return  temp;
             }
         }
         return null;
