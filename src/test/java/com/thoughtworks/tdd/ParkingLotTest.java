@@ -2,6 +2,8 @@ package com.thoughtworks.tdd;
 
 import com.sun.xml.internal.fastinfoset.tools.TransformInputOutput;
 import com.thoughtworks.tdd.controller.parkControl;
+import com.thoughtworks.tdd.controller.parkManageControl;
+import com.thoughtworks.tdd.controller.parkServiceControl;
 import com.thoughtworks.tdd.view.parkview;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -293,7 +295,28 @@ public class ParkingLotTest {
 //    }
 //
 
+    @Test
+    public void command_3_park() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        parkManageControl pmc=new parkManageControl(view,pc);
+        parkServiceControl psc=new parkServiceControl(view,pc,pmc);
+        Mockito.when( view.commandInput()).thenReturn("10");
+        Mockito.when(view.wrongInput()).thenReturn("非法指令，请查证后再输");
+        assertThat(psc.originJudge(view.commandInput()), is("非法指令，请查证后再输"));
+    }
 
+    @Test
+    public void command_1_1_no_parklot_set_parkservice() throws IOException {
+        parkview view = mock(parkview.class);
+        parkControl pc=new parkControl(view);
+        parkManageControl pmc=new parkManageControl(view,pc);
+        parkServiceControl psc=new parkServiceControl(view,pc,pmc);
+        Mockito.when( psc.view.commandInput()).thenReturn("1");
+        Mockito.when( pc.view.commandInput()).thenReturn("1");
+        Mockito.when(pc.view.fullView()).thenReturn("车已停满，请晚点再来");
+        assertThat(psc.originJudge(psc.view.commandInput()), is("车已停满，请晚点再来"));
+    }
 
 
 }

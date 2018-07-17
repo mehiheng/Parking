@@ -17,6 +17,9 @@ public class ParkingLot {
         name=n;
         originsize=r;
     }
+    public ParkingLot(int i) {
+        size=i;
+    }
 
     public Receipt park(Car car) {
         if(size==0){

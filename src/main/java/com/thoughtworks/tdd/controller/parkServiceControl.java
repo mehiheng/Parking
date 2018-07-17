@@ -29,8 +29,7 @@ public class parkServiceControl {
     public String originJudge(String command) throws IOException {
         if(command.equals("1")){
             String a=pc.begin();
-           pc.judge(a);
-           return null;
+            return  pc.judge(a);
         }
         else if(command.equals("2")){
             String a=pmc.begin();
